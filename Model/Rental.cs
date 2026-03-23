@@ -9,5 +9,5 @@ public class Rental(Device item, User borrower, DateTime rentalDate, int daysLim
     public DateTime DueDate { get; set; } = rentalDate.AddDays(daysLimit);
     public DateTime? ReturnDate { get; set; } = null; // null = not returned yet
     
-    public decimal Fine { get; set; } = 0; // penalty 
+    public decimal Fee { get; set; } = 0; // penalty 
 }
