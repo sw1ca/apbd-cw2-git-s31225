@@ -53,24 +53,42 @@ public class RentalService
         Console.WriteLine($"Rented {device.Name} for {user.Surname}");
     }
 
-    public void ReturnDevice(string userId, string deviceId)
+    public void ReturnDevice(string deviceId, DateTime? returnDate = null)
     {
+        DateTime actualReturnDate = returnDate ?? DateTime.Now;
         foreach (var r in Rentals)
         {
-            if (r.Borrower.Id == userId && r.ReturnDate == null)
+            if (r.Item.Id == deviceId && r.ReturnDate == null)
             {
-                r.ReturnDate = DateTime.Now;
+                r.ReturnDate = actualReturnDate;
                 r.Item.IsAvailable = true;
-
+                
                 if (r.ReturnDate > r.DueDate)
                 {
                     var delay = (r.ReturnDate.Value - r.DueDate).Days;
-                    r.Fee = delay * 10;
-                    Console.WriteLine($"Return delayed! Fee: {r.Fee}");
+                    if (delay > 0)
+                    {
+                        r.Penalty = delay * 20;
+                        Console.WriteLine($"Return delayed for {r.Item.Name}! Penalty: {r.Penalty} PLN ({delay} days).");
+                    }
                 }
-
+                else 
+                {
+                    Console.WriteLine($"{r.Item.Name} returned on time.");
+                }
                 return;
             }
         }
+        Console.WriteLine("No active rental found for this device.");
+    }
+
+    public void ShowReport()
+    {
+            Console.WriteLine("Current state of devices:");
+            foreach (var d in Devices)
+            {
+                string status = d.IsAvailable ? "Available" : "Rented";
+                Console.WriteLine($"{d.Name}: {status}");
+            }
     }
 }
