@@ -34,7 +34,7 @@ class Program
         service.RentDevice("Student 1", "Camera 1");
 
         Console.WriteLine("\n--- Returning device ---");
-        service.ReturnDevice("Student 1");
+        service.ReturnDevice("Laptop 1");
         
         Console.WriteLine("\n--- Returning device with penalty ---");
         DateTime date = DateTime.Now.AddDays(20);
