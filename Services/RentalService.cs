@@ -82,6 +82,52 @@ public class RentalService
         Console.WriteLine("No active rental found for this device.");
     }
 
+    public void SetDeviceUnavailable(string deviceId)
+    {
+        foreach (var d in Devices)
+        {
+            if (d.Id == deviceId)
+            {
+                d.IsAvailable = false;
+                Console.WriteLine($"Device {d.Name} marked as unavailable (service/damage).");
+                return;
+            }
+        }
+    }
+
+    public void ShowAvailableDevices()
+    {
+        Console.WriteLine("Available devices only");
+        foreach (var d in Devices)
+        {
+            if (d.IsAvailable)
+            {
+                Console.WriteLine($"- {d.Name} (ID: {d.Id})");
+            }
+        }
+    }
+    public void ShowLateRentals()
+    {
+        foreach (var r in Rentals)
+        {
+            if (r.ReturnDate == null && DateTime.Now > r.DueDate)
+            {
+                Console.WriteLine($"Late rental: {r.Item.Name} by {r.Borrower.Surname}");
+            }
+        }
+    }
+
+    public void ShowUserRentals(string userId)
+    {
+        Console.WriteLine($"Active rentals for user ID: {userId} ");
+        foreach (var r in Rentals)
+        {
+            if (r.Borrower.Id == userId && r.ReturnDate == null)
+            {
+                Console.WriteLine($"- {r.Item.Name} (Due: {r.DueDate.ToShortDateString()})");
+            }
+        }
+    }
     public void ShowReport()
     {
             Console.WriteLine("Current state of devices:");
