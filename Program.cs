@@ -23,23 +23,37 @@ class Program
         service.AddUser(student1);
         service.AddUser(employee1);
 
-        Console.WriteLine("--- Rental succeed ---");
+        Console.WriteLine("Rental succeed");
         service.RentDevice("Student 1", "Laptop 1");
 
-        Console.WriteLine("\n--- Renting unavailable device ---");
+        Console.WriteLine("\nRenting unavailable device");
         service.RentDevice("Employee 1", "Laptop 1");
 
-        Console.WriteLine("\n--- Exceeding the student's limit ---");
+        Console.WriteLine("\nExceeding the student's limit");
         service.RentDevice("Student 1", "Projector 1");
         service.RentDevice("Student 1", "Camera 1");
 
-        Console.WriteLine("\n--- Returning device ---");
+        Console.WriteLine("\nReturning device");
         service.ReturnDevice("Laptop 1");
         
-        Console.WriteLine("\n--- Returning device with penalty ---");
+        Console.WriteLine("\nReturning device with penalty");
         DateTime date = DateTime.Now.AddDays(20);
         service.ReturnDevice("Projector 1", date);
 
+        Console.WriteLine("\nShowing ONLY available devices");
+        service.ShowAvailableDevices();
+        
+        Console.WriteLine("\nMarking Camera 1 as damaged");
+        service.SetDeviceUnavailable("Camera 1");
+        service.RentDevice("Employee 1", "Camera 1");
+        
+        Console.WriteLine("\nActive rentals for Jan Kowalski");
+        service.RentDevice("Student 1", "Laptop 1");
+        service.ShowUserRentals("Student 1");
+        
+        Console.WriteLine("\nLate rentals report");
+        service.ShowLateRentals();
+        
         service.ShowReport();
     }
 }
