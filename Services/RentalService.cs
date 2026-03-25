@@ -56,25 +56,25 @@ public class RentalService
     public void ReturnDevice(string deviceId, DateTime? returnDate = null)
     {
         DateTime actualReturnDate = returnDate ?? DateTime.Now;
-        foreach (var r in Rentals)
+        foreach (var rental in Rentals)
         {
-            if (r.Item.Id == deviceId && r.ReturnDate == null)
+            if (rental.Item.Id == deviceId && rental.ReturnDate == null)
             {
-                r.ReturnDate = actualReturnDate;
-                r.Item.IsAvailable = true;
+                rental.ReturnDate = actualReturnDate;
+                rental.Item.IsAvailable = true;
                 
-                if (r.ReturnDate > r.DueDate)
+                if (rental.ReturnDate > rental.DueDate)
                 {
-                    var delay = (r.ReturnDate.Value - r.DueDate).Days;
+                    var delay = (rental.ReturnDate.Value - rental.DueDate).Days;
                     if (delay > 0)
                     {
-                        r.Penalty = delay * 20;
-                        Console.WriteLine($"Return delayed for {r.Item.Name}! Penalty: {r.Penalty} PLN ({delay} days).");
+                        rental.Penalty = delay * 20;
+                        Console.WriteLine($"Return delayed for {rental.Item.Name}! Penalty: {rental.Penalty} PLN ({delay} days).");
                     }
                 }
                 else 
                 {
-                    Console.WriteLine($"{r.Item.Name} returned on time.");
+                    Console.WriteLine($"{rental.Item.Name} returned on time.");
                 }
                 return;
             }
@@ -84,12 +84,12 @@ public class RentalService
 
     public void SetDeviceUnavailable(string deviceId)
     {
-        foreach (var d in Devices)
+        foreach (var device in Devices)
         {
-            if (d.Id == deviceId)
+            if (device.Id == deviceId)
             {
-                d.IsAvailable = false;
-                Console.WriteLine($"Device {d.Name} marked as unavailable (service/damage).");
+                device.IsAvailable = false;
+                Console.WriteLine($"Device {device.Name} marked as unavailable (service/damage).");
                 return;
             }
         }
@@ -98,21 +98,21 @@ public class RentalService
     public void ShowAvailableDevices()
     {
         Console.WriteLine("Available devices only");
-        foreach (var d in Devices)
+        foreach (var device in Devices)
         {
-            if (d.IsAvailable)
+            if (device.IsAvailable)
             {
-                Console.WriteLine($"- {d.Name} (ID: {d.Id})");
+                Console.WriteLine($"- {device.Name} (ID: {device.Id})");
             }
         }
     }
     public void ShowLateRentals()
     {
-        foreach (var r in Rentals)
+        foreach (var rental in Rentals)
         {
-            if (r.ReturnDate == null && DateTime.Now > r.DueDate)
+            if (rental.ReturnDate == null && DateTime.Now > rental.DueDate)
             {
-                Console.WriteLine($"Late rental: {r.Item.Name} by {r.Borrower.Surname}");
+                Console.WriteLine($"Late rental: {rental.Item.Name} by {rental.Borrower.Surname}");
             }
         }
     }
@@ -120,21 +120,21 @@ public class RentalService
     public void ShowUserRentals(string userId)
     {
         Console.WriteLine($"Active rentals for user ID: {userId} ");
-        foreach (var r in Rentals)
+        foreach (var rental in Rentals)
         {
-            if (r.Borrower.Id == userId && r.ReturnDate == null)
+            if (rental.Borrower.Id == userId && rental.ReturnDate == null)
             {
-                Console.WriteLine($"- {r.Item.Name} (Due: {r.DueDate.ToShortDateString()})");
+                Console.WriteLine($"- {rental.Item.Name} (Due: {rental.DueDate.ToShortDateString()})");
             }
         }
     }
     public void ShowReport()
     {
             Console.WriteLine("Current state of devices:");
-            foreach (var d in Devices)
+            foreach (var device in Devices)
             {
-                string status = d.IsAvailable ? "Available" : "Rented";
-                Console.WriteLine($"{d.Name}: {status}");
+                string status = device.IsAvailable ? "Available" : "Rented";
+                Console.WriteLine($"{device.Name}: {status}");
             }
     }
 }
